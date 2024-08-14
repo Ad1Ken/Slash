@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 35838764}
   - component: {fileID: 35838765}
   m_Layer: 5
-  m_Name: Panel - BoxyMeinView
+  m_Name: Panel - SlashMeinView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1248,7 +1248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 208209376}
   m_Layer: 5
-  m_Name: BoxyLosePanel
+  m_Name: SlashLosePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1551,7 +1551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 347623749}
   m_Layer: 0
-  m_Name: BoxyManager
+  m_Name: SlashManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2156,7 +2156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 774680347}
   m_Layer: 5
-  m_Name: BoxyWinPanel
+  m_Name: SlashWinPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2328,7 +2328,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1025425995}
   m_Layer: 0
-  m_Name: BoxyActivitySelectionManager
+  m_Name: SlashActivitySelectionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3433,7 +3433,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1681844689}
   m_Layer: 5
-  m_Name: BoxyRulesPanel
+  m_Name: SlashRulesPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3822,7 +3822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1844684940}
   m_Layer: 0
-  m_Name: BoxyUiManager
+  m_Name: SlashUiManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
