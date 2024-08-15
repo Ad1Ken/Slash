@@ -5,12 +5,21 @@ using UnityEngine;
 public class SlashManager : SlashBaseGameManager
 {
     #region PUBLIC_PROPERTIES
+    public static SlashManager Instance { get; private set; }
+
+
+    public float percentageToSlash;
     #endregion
 
     #region PRIVATE_PROPERTIES
+
     #endregion
 
     #region UNITY_CALLBACKS
+    private void Awake()
+    {
+        Instance = this;
+    }
     #endregion
 
     #region PUBLIC_METHODS
@@ -43,15 +52,20 @@ public class SlashManager : SlashBaseGameManager
     {
 
     }
-}
 #endregion
 
 #region PRIVATE_METHODS
+
+    private float GetRandomPercentage()
+    {
+        return Random.Range(1, 100);
+    }
 #endregion
 
-#region DELEGTE_CALLBACKS
+#region DELEGTE_CALLBACK
 #endregion
 
 #region Coroutines
 #endregion
+}
 
