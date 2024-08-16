@@ -8,6 +8,10 @@ public class SlashManager : SlashBaseGameManager
     public static SlashManager Instance { get; private set; }
 
 
+    public float percentageByUser {  get; private set; }
+    const int boxWidth =  900;
+
+
     public float percentageToSlash;
     #endregion
 
@@ -52,13 +56,29 @@ public class SlashManager : SlashBaseGameManager
     {
 
     }
-#endregion
+    public void CalculatePercentaggeByUser()
+    {
+        float finalPostion = SlashUIManager.instance.slashMainView.slashSlider.finalPosition.y;//final position at which user stopped the slider
+        float positionRespectToWidth = (boxWidth/2) + finalPostion;// calculated position according to the width of the box or item
+        percentageByUser = (positionRespectToWidth / boxWidth) * 100;//calculated percentage
+    }
+
+    public bool isValidPosition()
+    {
+        if(percentageByUser == percentageToSlash)
+            return true;
+        return false;
+    }
+    
+#endregion  
 
 #region PRIVATE_METHODS
 
+    // Get random percentage for people to stop the Slider on
     private float GetRandomPercentage()
     {
-        return Random.Range(1, 100);
+        percentageToSlash = Random.Range(1, 100);
+        return percentageToSlash;
     }
 #endregion
 
