@@ -51,6 +51,7 @@ public class SlashSlider : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     {
         // Optionally, you can add code here if you want to do something when the drag ends.
         finalPosition = rectTransform.localPosition;
+        SlashManager.Instance.CalculatePercentaggeByUser();
     }
     #endregion
 

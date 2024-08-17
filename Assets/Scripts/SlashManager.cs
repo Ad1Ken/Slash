@@ -24,12 +24,16 @@ public class SlashManager : SlashBaseGameManager
     {
         Instance = this;
     }
+    public void Start()
+    {
+        Init();
+    }
     #endregion
 
     #region PUBLIC_METHODS
     public override void Init()
     {
-
+        //CalculatePercentaggeByUser();
     }
 
     public override void OnClickPause()
@@ -58,9 +62,14 @@ public class SlashManager : SlashBaseGameManager
     }
     public void CalculatePercentaggeByUser()
     {
-        float finalPostion = SlashUIManager.instance.slashMainView.slashSlider.finalPosition.y;//final position at which user stopped the slider
+        float finalPostion = SlashUIManager.instance.slashMainView.imageHandler.slashSlider.finalPosition.x;//final position at which user stopped the slider
+        Debug.Log("finalPostion: " + finalPostion);
         float positionRespectToWidth = (boxWidth/2) + finalPostion;// calculated position according to the width of the box or item
+        Debug.Log("positionRespectToWidth: " + positionRespectToWidth);
         percentageByUser = (positionRespectToWidth / boxWidth) * 100;//calculated percentage
+        Debug.Log("percentageByUser: " + percentageByUser);
+
+        SlashUIManager.instance.slashMainView.SplitImageRoutine(percentageByUser);
     }
 
     public bool isValidPosition()
@@ -70,6 +79,10 @@ public class SlashManager : SlashBaseGameManager
         return false;
     }
     
+    public void PlaySplitAnimation()
+    {
+        SlashUIManager.instance.slashMainView.SplitImage(percentageByUser);
+    }
 #endregion  
 
 #region PRIVATE_METHODS
