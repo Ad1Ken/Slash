@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "813547682576",
+    "firebase_url": "https://slash-fffba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "slash-fffba",
+    "storage_bucket": "slash-fffba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813547682576:android:c3bf4b436cefbc329fc395",
+        "android_client_info": {
+          "package_name": "com.Sphinx.Slash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsjBIHXI1m1wlR8eCs7T19SBRPOiHhdrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -72,5 +72,29 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 
-Assets/StreamingAssets/google-services-desktop.json
-/[Aa]ssets/[Pp]lugins/[Aa]ndroid/[Ff]irebase/
+# Firebase folder - exclude sensitive files
+# Ignore service account credentials and auto-generated files
+Assets/Firebase/serviceAccountKey.json
+Assets/Firebase/Editor/
+Assets/Firebase/Editor/*.meta
+Assets/Firebase/Editor/*.csproj
+
+# Include Firebase project-specific configuration files
+# (uncomment if you have config files that should be included)
+# !Assets/Firebase/config.json
+
+# External Dependency Manager (Play Services Resolver)
+# Exclude auto-generated files and local dependencies
+Assets/ExternalDependencyManager/Editor/
+/Assets/ExternalDependencyManager/Editor/*.meta
+/Assets/ExternalDependencyManager/Editor/.*
+/Assets/ExternalDependencyManager/Editor/*.csproj
+
+# Editor Default Resources (specific to the Unity editor environment)
+Assets/Editor Default Resources/
+
+# Adaptive Performance
+# Exclude any platform-specific or unnecessary files
+Assets/Adaptive Performance/
+/Assets/AdaptivePerformance/*meta
+/Assets/AdaptivePerformance/*csproj
