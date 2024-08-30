@@ -13,6 +13,9 @@ public class SlashManager : SlashBaseGameManager
 
 
     public float percentageToSlash;
+
+    public JSONLevelData jsonLevelData;
+    public LevelData levelData;
     #endregion
 
     #region PRIVATE_PROPERTIES

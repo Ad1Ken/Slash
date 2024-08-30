@@ -3,8 +3,14 @@ using UnityEngine;
 
 public class StorageManager
 {
+    //public static StorageManager instance;
     private readonly string cacheDirectory;
 
+
+    public void Awake()
+    {
+        //instance = this;
+    }
     public StorageManager()
     {
         cacheDirectory = Path.Combine(Application.persistentDataPath, "ImageCache");

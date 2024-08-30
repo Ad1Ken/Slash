@@ -9,9 +9,10 @@ using Firebase;
 public class FirebaseManager : MonoBehaviour
 {
     #region PUBLIC_PROPERTIES
-    public static FirebaseManager Instance { get; private set; }
-    public DatabaseReference DatabaseReference { get; private set; }
+    public static FirebaseManager Instance;
+    public DatabaseReference DatabaseReference;
 
+    public DatabaseServices DatabaseServices;
     #endregion
 
     #region PRIVATE_PROPERTIES
@@ -24,7 +25,7 @@ public class FirebaseManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeFirebase();
+            //InitializeFirebase();
         }
         else
         {
@@ -34,7 +35,7 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
-    private void InitializeFirebase()
+    public void InitializeFirebase()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {

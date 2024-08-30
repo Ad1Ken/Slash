@@ -13,12 +13,7 @@ using UnityEngine.Networking;
 public class DatabaseServices : MonoBehaviour
 {
     #region PUBLIC_PROPERTIES
-    public JSONLevelData jsonLevelData;
-    public LevelData levelData;
 
-    public DatabaseReference DatabaseReference;
-
-    public Image itemPlacedObject;
     #endregion
 
     #region PRIVATE_PROPERTIES
@@ -29,14 +24,13 @@ public class DatabaseServices : MonoBehaviour
     #region UNITY_CALLBACKS
     private void Awake()
     {
-        DatabaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        storageManager = new StorageManager();
         //OutputJSON();
     }
 
     private void Start()
     {
-        LoadActiveLevelData(1);
+        storageManager = new StorageManager();
+        //LoadActiveLevelData(1);
     }
     #endregion
 
@@ -46,55 +40,21 @@ public class DatabaseServices : MonoBehaviour
     //    string json = JsonUtility.ToJson(jsonLevelData);
     //    File.WriteAllText(Application.dataPath + "/jsonLevelData.txt", json);
     //}
-    public void LoadActiveLevelData(int levelIndex)
+    public void LoadActiveLevelData()
     {
-        StartCoroutine(LoadData("LevelData", () => {
-            StartCoroutine(DownloadImages(levelIndex));
-        }));
+        StartCoroutine(LoadData("LevelData"));
     }
     #endregion
 
     #region PRIVATE_METHODS
-    private Sprite SpriteFromTexture2D(Texture2D texture) //Fucntion to return sprite through textures
-    {
-        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    private void InitializeLevelData(int levelIndex)
-    {
-        levelData.perLevelData = new PerLevelData[1];
-        levelData.perLevelData[0] = new PerLevelData();
-        levelData.perLevelData[0].levelParameters = new LevelParameters[jsonLevelData.jsonPerLevelData[levelIndex].levelParameters.Length];
-        for (int j = 0; j < levelData.perLevelData[0].levelParameters.Length; j++)
-        {
-            levelData.perLevelData[0].levelParameters[j] = new LevelParameters();
-
-            // Instantiate the Image directly using the prefab assigned in the inspector
-            Image imageComponent = Instantiate(itemPlacedObject);
-
-            // Assign the instantiated Image component to the levelParameters
-            levelData.perLevelData[0].levelParameters[j].itemImage = imageComponent;
-        }
-        //for (int i = 0; i < levelData.perLevelData.Length; i++)
-        //{
-        //    levelData.perLevelData[i] = new PerLevelData();
-        //    levelData.perLevelData[i].levelParameters = new LevelParameters[jsonLevelData.jsonPerLevelData[i].levelParameters.Length];
-        //    for (int j = 0; j < levelData.perLevelData[i].levelParameters.Length; j++)
-        //    {
-        //        levelData.perLevelData[i].levelParameters[j] = new LevelParameters();
-
-        //        // Instantiate the Image directly using the prefab assigned in the inspector
-        //        Image imageComponent = Instantiate(itemPlacedObject);
-
-        //        // Assign the instantiated Image component to the levelParameters
-        //        levelData.perLevelData[i].levelParameters[j].itemImage = imageComponent;
-        //    }
-        //}
-    }
-
     private string GetImagePath(string url)
     {
         return Path.Combine(Application.persistentDataPath, Path.GetFileName(url));
+    }
+
+    private Sprite SpriteFromTexture2D(Texture2D texture) //Fucntion to return sprite through textures
+    {
+        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
     }
     #endregion
 
@@ -102,9 +62,9 @@ public class DatabaseServices : MonoBehaviour
     #endregion
 
     #region Coroutines
-    public IEnumerator LoadData(string path, Action action = null)
+    public IEnumerator LoadData(string path)
     {
-        var serverData = DatabaseReference.Child(path).GetValueAsync();
+        var serverData = FirebaseManager.Instance.DatabaseReference.Child(path).GetValueAsync();
         yield return new WaitUntil(predicate: () => serverData.IsCompleted);
 
         DataSnapshot snapshot = serverData.Result;
@@ -113,62 +73,41 @@ public class DatabaseServices : MonoBehaviour
         if (jsonData != null)
         {
             Debug.Log(" Data Found: " + jsonData);
-            jsonLevelData = JsonConvert.DeserializeObject<JSONLevelData>(jsonData);
-            action?.Invoke();
+            SlashManager.Instance.jsonLevelData = JsonConvert.DeserializeObject<JSONLevelData>(jsonData);
             //levelData = JsonUtility.FromJson<LevelData>("{\"levelParameters\":" + jsonData + "}");   
         }
         else
             Debug.Log("No Data Found");
     }
-    private IEnumerator DownloadImages(int levelIndex)
+    
+
+    public IEnumerator SendRequestToDownloadImage(string url, string filename, float percentage, int val)
     {
-        InitializeLevelData(levelIndex);
-
-        for (int j = 0; j < jsonLevelData.jsonPerLevelData[levelIndex].levelParameters.Length; j++)
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
         {
-            string url = jsonLevelData.jsonPerLevelData[levelIndex].levelParameters[j].itemImage;
-            string filename = Path.GetFileName(url);
-            float percentage = jsonLevelData.jsonPerLevelData[levelIndex].levelParameters[j].percentage;
+            yield return request.SendWebRequest();
 
-            if (storageManager.ImageExists(filename))
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                Texture2D cachedTexture = storageManager.LoadImage(filename, out float cachedPercentage);
-                if (cachedTexture != null)
-                {
-                    SpriteFromTexture2D(cachedTexture);
-                    levelData.perLevelData[0].levelParameters[j].itemImage.sprite = SpriteFromTexture2D(cachedTexture);
-                    levelData.perLevelData[0].levelParameters[j].percentage = cachedPercentage;
-                }
+                Texture2D texture = DownloadHandlerTexture.GetContent(request);
+                storageManager.SaveImage(filename, texture.EncodeToPNG(), percentage);
+                SlashManager.Instance.levelData.perLevelData[0].levelParameters[val].itemImage.sprite = SpriteFromTexture2D(texture);
+                SlashManager.Instance.levelData.perLevelData[0].levelParameters[val].percentage = percentage;
             }
             else
             {
-                using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
-                {
-                    yield return request.SendWebRequest();
-
-                    if (request.result == UnityWebRequest.Result.Success)
-                    {
-                        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-                        storageManager.SaveImage(filename, texture.EncodeToPNG(), percentage);
-                        levelData.perLevelData[0].levelParameters[j].itemImage.sprite = SpriteFromTexture2D(texture);
-                        levelData.perLevelData[0].levelParameters[j].percentage = percentage;
-                    }
-                    else
-                    {
-                        Debug.LogError("Failed to download image: " + request.error);
-                    }
-                }
+                Debug.LogError("Failed to download image: " + request.error);
             }
         }
     }
-    #endregion
+        #endregion
 }
 
 
 
-#region JSON Data
-// JSON classes to retrieve level data
-[System.Serializable]
+    #region JSON Data
+    // JSON classes to retrieve level data
+    [System.Serializable]
 public class JSONLevelData // All Level Data
 {
     public JSONPerLevelData[] jsonPerLevelData;
