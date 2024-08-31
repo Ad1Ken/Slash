@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlashLosePanel : MonoBehaviour
+public class SlashLosePanel : BaseView
 {
     #region PUBLIC_PROPERTIES
     #endregion

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class SlashMainView : MonoBehaviour
+public class SlashMainView : BaseView
 {
     #region  PUBLIC_PROPERTIES
     public ImageHandler imageHandler;
@@ -100,10 +100,7 @@ public class SlashMainView : MonoBehaviour
 
     IEnumerator StartExecution()
     {
-        FirebaseManager.Instance.InitializeFirebase();
-        yield return new WaitForSeconds(3f);
-        FirebaseManager.Instance.DatabaseServices.LoadActiveLevelData();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
         DownloadImages(1);
     }
     public IEnumerator SplitImage(float percentage)

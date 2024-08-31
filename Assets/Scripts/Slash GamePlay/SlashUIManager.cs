@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlashUIManager : MonoBehaviour
@@ -8,6 +9,10 @@ public class SlashUIManager : MonoBehaviour
     public static SlashUIManager instance { get; private set; }
 
     public SlashMainView slashMainView;
+    public SlashActivityView panelActivityView;
+    public SlashWinPanel panelWinView;
+    public SlashLosePanel panelLoseView; 
+    public SlashLoadingView panelLoadingView;
     #endregion
 
     #region PRIVATE_PROPERTIES
@@ -21,6 +26,14 @@ public class SlashUIManager : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
+    public void HideAllPanel()
+    {
+        slashMainView.HideView();
+        panelActivityView.HideView();   
+        panelWinView.HideView();
+        panelLoseView.HideView();
+        panelLoadingView.HideView();
+    }
     #endregion
 
     #region PRIVATE_METHODS

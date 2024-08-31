@@ -5,6 +5,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine.UI;
 using Firebase;
+using System;
 
 public class FirebaseManager : MonoBehaviour
 {
