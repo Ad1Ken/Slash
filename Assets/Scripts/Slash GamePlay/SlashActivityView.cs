@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlashActivityView : BaseView
@@ -13,9 +14,14 @@ public class SlashActivityView : BaseView
     #endregion
 
     #region UNITY_CALLBACKS
+    private void Start()
+    {
+        StartCoroutine(InstantiateActivities());
+    }
     #endregion
 
     #region PUBLIC_METHODS
+    
     #endregion
 
     #region PRIVATE_METHODS

@@ -20,9 +20,10 @@ public class SlashActivityItem : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
-    public void OnClickButton()
+    public void OnClickPlay()
     {
-        //BoxyManager.Instance.Init(activityIndex);
+        SlashUIManager.instance.panelActivityView.HideView();
+        SlashUIManager.instance.slashMainView.ShowView();
     }
     public void SetLevelText()
     {

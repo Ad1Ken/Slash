@@ -61,7 +61,7 @@ public class SlashManager : SlashBaseGameManager
 
     public override void StartGame()
     {
-
+        
     }
     public void CalculatePercentaggeByUser()
     {

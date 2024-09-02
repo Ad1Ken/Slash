@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SlashLoadingView : BaseView
 {
     #region PUBLIC_PROPERTIES
+    public Slider loadingslider;
     #endregion
 
     #region PRIVATE_PROPERTIES
@@ -18,6 +20,7 @@ public class SlashLoadingView : BaseView
         {
             LoadMainMenu();
         }));
+        StartCoroutine(IncreaseSlider(1f,2f));
     }
     #endregion
 
@@ -44,6 +47,19 @@ public class SlashLoadingView : BaseView
         StartCoroutine(FirebaseManager.Instance.DatabaseServices.LoadData("LevelData"));
         yield return new WaitForSeconds(2f);
         callback?.Invoke();
+    }
+
+    private IEnumerator IncreaseSlider(float waitTime, float time)
+    {
+        yield return new WaitForSeconds(waitTime);
+        float i = 0;
+
+        while (i < 1)
+        {
+            i += Time.deltaTime / time;
+            loadingslider.value = Mathf.Lerp(0f, 1f, i);
+            yield return null;
+        }
     }
     #endregion
 }
