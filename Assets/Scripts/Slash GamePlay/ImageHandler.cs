@@ -8,7 +8,6 @@ public class ImageHandler : MonoBehaviour
     #region PUBLIC_PROPERTIES
     public SlashSlider slashSlider;
 
-    public Image originalImage; // Assign your image in the inspector
     public Image leftImage;     // Assign the first part of the image
     public Image rightImage;    // Assign the second part of the image
 
@@ -16,12 +15,18 @@ public class ImageHandler : MonoBehaviour
     #endregion
 
     #region PRIVATE_PROPERTIES
+    private Image originalImage; 
     #endregion
 
     #region UNITY_CALLBACKS
     #endregion
 
     #region PUBLIC_METHODS
+
+    public void SetOriginalImage(Image imageToSlash)
+    {
+        originalImage = imageToSlash;
+    }
     public void SplitAndPositionImages(float percentage)
     {
         // Get original sprite and texture
@@ -73,6 +78,13 @@ public class ImageHandler : MonoBehaviour
         originalImage.gameObject.SetActive(false);
         leftImage.gameObject.SetActive(true);
         rightImage.gameObject.SetActive(true);
+    }
+
+    public void ResetImages()
+    {
+        leftImage.gameObject.SetActive(false);
+        rightImage.gameObject.SetActive(false);
+        originalImage.gameObject.SetActive(true);
     }
     #endregion
 

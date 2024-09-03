@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,12 +11,12 @@ public class SlashMainView : BaseView
 {
     #region  PUBLIC_PROPERTIES
     public ImageHandler imageHandler;
-    public Coroutine splitCoroutine;
     public ScoreSlider scoreSlider;
 
     #endregion
 
     #region PRIVATE_PROPERTIES
+    private Coroutine splitCoroutine;
     private StorageManager storageManager;
     [SerializeField] private Image itemPlacedPrefab;
     #endregion
@@ -23,15 +24,26 @@ public class SlashMainView : BaseView
     #region UNITY_CALLBACKS
     private void Start()
     {
-        storageManager = new StorageManager();
+        //storageManager = new StorageManager();
         //Debug.Log("After/Before Firebase");
         //FirebaseManager.Instance.DatabaseServices.LoadActiveLevelData();
         //DownloadImages(1);
-        StartCoroutine(StartExecution());
+ 
     }
     #endregion
 
     #region PUBLIC_METHODS
+
+    public void SetImageToSlash(Image imageToSlash)
+    {
+        imageHandler.SetOriginalImage(imageToSlash);
+    }
+    public void StartDownloadImageRoutine(int currentLevel)
+    {
+        if (storageManager == null) 
+            storageManager = new StorageManager();
+        StartCoroutine(DownloadImagesRoutine(currentLevel));
+    }
     public void SplitImageRoutine(float percentage)
     {
         if (splitCoroutine != null) StopCoroutine(splitCoroutine); 
@@ -98,10 +110,10 @@ public class SlashMainView : BaseView
 
     #region Coroutines
 
-    IEnumerator StartExecution()
+    IEnumerator DownloadImagesRoutine(int currentLevel)
     {
         yield return new WaitForSeconds(1f);
-        DownloadImages(1);
+        DownloadImages(currentLevel);
     }
     public IEnumerator SplitImage(float percentage)
     {

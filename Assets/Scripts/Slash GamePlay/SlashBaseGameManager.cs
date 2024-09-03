@@ -9,14 +9,14 @@ public abstract class SlashBaseGameManager : MonoBehaviour
 
     internal int currentLevel = 0;
 
-    private int maxLevel = 15;
+    private int maxLevel = 5;
 
     public abstract void Init();
     public abstract void StartGame();
     public abstract void ResetActivity();
     public abstract void OnLevelComplete();
-    public abstract void OnClickPause();
-    public abstract void OnClickResume();
+    //public abstract void OnClickPause();
+    //public abstract void OnClickResume();
 
     internal virtual void LoadNextLevel()
     {

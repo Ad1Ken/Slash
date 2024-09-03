@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlashManager : SlashBaseGameManager
@@ -19,7 +20,10 @@ public class SlashManager : SlashBaseGameManager
     #endregion
 
     #region PRIVATE_PROPERTIES
-
+    private int totalRounds;
+    private int currentRound;
+    private int totalScore;
+    private float errorMarginPercentage = 3;
     #endregion
 
     #region UNITY_CALLBACKS
@@ -34,36 +38,61 @@ public class SlashManager : SlashBaseGameManager
     #endregion
 
     #region PUBLIC_METHODS
-    public override void Init()
+    public override void Init() //TODO
     {
         //CalculatePercentaggeByUser();
     }
-
-    public override void OnClickPause()
+    public override void StartGame() //TODO
     {
-
+        ResetActivity();
+        SetLevelParameters();
+        Generate();
+    }
+    public override void ResetActivity()
+    {
+        ResetRound();
+        totalScore = 0;
+        currentRound = 0;
     }
 
-    public override void OnClickResume()
-    {
-
-    }
+    
 
     public override void OnLevelComplete()
     {
-
+        if (currentRound == totalRounds)
+        {
+            if (totalScore >= 3)
+            {
+                if (currentLevel > GetTotalNumberOfActivities() - 1)
+                    currentLevel = 0;
+                SlashUIManager.instance.panelWinView.ShowView();
+                currentLevel++;
+            }
+            else
+            {
+                SlashUIManager.instance.panelLoseView.ShowView();
+            }
+        }
+        else
+        {
+            Debug.Log("Rounds Not Completed");
+        }
     }
 
-    public override void ResetActivity()
+    public void Generate()
     {
-
+        if(currentRound < totalRounds)
+        {
+            ResetRound();
+            SetRoundParameters();
+            currentRound++;
+        }
+        else
+        {
+            OnLevelComplete();
+        }
     }
-
-    public override void StartGame()
-    {
-        
-    }
-    public void CalculatePercentaggeByUser()
+    public void CalculatePercentaggeByUser() // To do Calling properly
     {
         float finalPostion = SlashUIManager.instance.slashMainView.imageHandler.slashSlider.finalPosition.x;//final position at which user stopped the slider
         Debug.Log("finalPostion: " + finalPostion);
@@ -77,7 +106,8 @@ public class SlashManager : SlashBaseGameManager
 
     public bool isValidPosition()
     {
-        if(percentageByUser == percentageToSlash)
+        if(percentageByUser == percentageToSlash || (percentageByUser >= percentageToSlash - errorMarginPercentage 
+            && percentageByUser <= percentageToSlash + errorMarginPercentage))
             return true;
         return false;
     }
@@ -89,19 +119,47 @@ public class SlashManager : SlashBaseGameManager
 #endregion  
 
 #region PRIVATE_METHODS
-
-    // Get random percentage for people to stop the Slider on
-    private float GetRandomPercentage()
+    private int GetTotalNumberOfActivities()
     {
-        percentageToSlash = Random.Range(1, 100);
-        return percentageToSlash;
+        return levelData.perLevelData.Length;
     }
+    private void SetLevelParameters()
+    {
+        SlashUIManager.instance.slashMainView.StartDownloadImageRoutine(currentLevel);
+    }
+
+    private void SetRoundParameters()
+    {
+        SlashUIManager.instance.slashMainView.SetImageToSlash(levelData.perLevelData[currentLevel].levelParameters[currentRound].itemImage);
+        percentageToSlash = levelData.perLevelData[currentLevel].levelParameters[currentRound].percentage;
+    }
+    private void  ResetRound()
+    {
+        SlashUIManager.instance.slashMainView.imageHandler.ResetImages();
+    }
+    // Get random percentage for people to stop the Slider on
+    //private float GetRandomPercentage()
+    //{
+    //    percentageToSlash = Random.Range(1, 100);
+    //    return percentageToSlash;
+    //}
 #endregion
 
 #region DELEGTE_CALLBACK
 #endregion
 
 #region Coroutines
+    private IEnumerator OnWin() //TODO
+    {
+        totalScore++;
+        Generate();
+        yield return null;
+    }
+    private IEnumerator OnLose() //TODO
+    {
+        yield return null;
+        Generate();
+    }
 #endregion
 }
 
