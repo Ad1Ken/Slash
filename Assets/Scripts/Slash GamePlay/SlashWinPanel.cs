@@ -14,6 +14,11 @@ public class SlashWinPanel : BaseView
     #endregion
 
     #region PUBLIC_METHODS
+    public void OnClickNext()
+    {
+        StartCoroutine(SlashManager.Instance.StartLoadingData(SlashManager.Instance.currentLevel));
+        HideView();
+    }
     #endregion
 
     #region PRIVATE_METHODS

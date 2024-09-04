@@ -10,22 +10,26 @@ public class ImageHandler : MonoBehaviour
 
     public Image leftImage;     // Assign the first part of the image
     public Image rightImage;    // Assign the second part of the image
+    public Image originalImage;
 
     public Animator axeAnimator;
     #endregion
 
     #region PRIVATE_PROPERTIES
-    private Image originalImage; 
     #endregion
 
     #region UNITY_CALLBACKS
+    private void Start()
+    {
+        ResetImages();
+    }
     #endregion
 
     #region PUBLIC_METHODS
 
-    public void SetOriginalImage(Image imageToSlash)
+    public void SetOriginalImage(Sprite imageToSlash)
     {
-        originalImage = imageToSlash;
+        originalImage.sprite = imageToSlash;
     }
     public void SplitAndPositionImages(float percentage)
     {
@@ -85,6 +89,8 @@ public class ImageHandler : MonoBehaviour
         leftImage.gameObject.SetActive(false);
         rightImage.gameObject.SetActive(false);
         originalImage.gameObject.SetActive(true);
+        axeAnimator.Rebind();
+        axeAnimator.Update(0f);
     }
     #endregion
 

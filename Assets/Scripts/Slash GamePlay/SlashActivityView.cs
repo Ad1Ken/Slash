@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SlashActivityView : BaseView
 {
     #region PUBLIC_PROPERTIES
     public SlashActivityItem activityItemPrefab;
     public GameObject content;
+    public Slider loadingSlider;
     #endregion
 
     #region PRIVATE_PROPERTIES
@@ -21,7 +23,10 @@ public class SlashActivityView : BaseView
     #endregion
 
     #region PUBLIC_METHODS
-    
+    public void OnClickExit()
+    {
+        Application.Quit();
+    }
     #endregion
 
     #region PRIVATE_METHODS
@@ -44,6 +49,19 @@ public class SlashActivityView : BaseView
             item.activityIndex = i;
             item.SetLevelText();
             yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public IEnumerator IncreaseSlider(float waitTime, float time)
+    {
+        yield return new WaitForSeconds(waitTime);
+        float i = 0;
+
+        while (i < 1)
+        {
+            i += Time.deltaTime / time;
+            loadingSlider.value = Mathf.Lerp(0f, 1f, i);
+            yield return null;
         }
     }
     #endregion

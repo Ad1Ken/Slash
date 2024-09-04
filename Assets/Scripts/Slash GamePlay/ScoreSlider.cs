@@ -29,10 +29,17 @@ public class ScoreSlider : MonoBehaviour
     #endregion
 
     #region PUBLIC_METHODS
-    public void updataScore()
+    public void updateScore()
     {
         //scoreSlider.value += score;
+        Debug.Log("Increase Score Slider1");
         StartCoroutine(IncreaseSlider(scoreSlider.value, 2f));
+    }
+
+    public void ResetSlider()
+    {
+        scoreSlider.value = 0;
+        scoreSlider.maxValue = 5;
     }
     #endregion
 
@@ -45,6 +52,7 @@ public class ScoreSlider : MonoBehaviour
     #region Coroutines
     private IEnumerator IncreaseSlider(float currentValue, float time )
     {
+        Debug.Log("Increase Score Slider2");
         float i = 0;
         currentValue = scoreSlider.value;
         float targetValue = currentValue + 1;

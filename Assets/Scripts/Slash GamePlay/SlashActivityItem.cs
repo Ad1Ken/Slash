@@ -22,8 +22,8 @@ public class SlashActivityItem : MonoBehaviour
     #region PUBLIC_METHODS
     public void OnClickPlay()
     {
-        SlashUIManager.instance.panelActivityView.HideView();
-        SlashUIManager.instance.slashMainView.ShowView();
+        StartCoroutine(SlashManager.Instance.StartLoadingData(activityIndex));
+        StartCoroutine(SlashUIManager.instance.panelActivityView.IncreaseSlider(0f,3f));
     }
     public void SetLevelText()
     {
@@ -38,5 +38,11 @@ public class SlashActivityItem : MonoBehaviour
     #endregion
 
     #region Coroutines
+    //private IEnumerator StartLoadingData()
+    //{
+    //    SlashManager.Instance.Init(activityIndex);
+    //    yield return new WaitForSeconds(3f);
+    //    SlashUIManager.instance.panelActivityView.HideView();
+    //}
     #endregion
 }

@@ -11,19 +11,16 @@ public class SlashManager : SlashBaseGameManager
 
     public float percentageByUser {  get; private set; }
     const int boxWidth =  900;
-
-
     public float percentageToSlash;
-
     public JSONLevelData jsonLevelData;
     public LevelData levelData;
     #endregion
 
     #region PRIVATE_PROPERTIES
     private int totalRounds;
-    private int currentRound;
+    private int currentRound = 0;
     private int totalScore;
-    private float errorMarginPercentage = 3;
+    private float errorMarginPercentage = 10;
     #endregion
 
     #region UNITY_CALLBACKS
@@ -33,26 +30,23 @@ public class SlashManager : SlashBaseGameManager
     }
     public void Start()
     {
-        Init();
+        //Init(currentLevel);
     }
     #endregion
 
     #region PUBLIC_METHODS
-    public override void Init() //TODO
+    public override void Init(int levelIndex)
     {
-        //CalculatePercentaggeByUser();
+        currentLevel = levelIndex;
+        StartCoroutine(StartGame());
     }
-    public override void StartGame() //TODO
-    {
-        ResetActivity();
-        SetLevelParameters();
-        Generate();
-    }
+
     public override void ResetActivity()
     {
         ResetRound();
         totalScore = 0;
         currentRound = 0;
+        SlashUIManager.instance.slashMainView.scoreSlider.ResetSlider();
     }
 
     
@@ -92,11 +86,11 @@ public class SlashManager : SlashBaseGameManager
             OnLevelComplete();
         }
     }
-    public void CalculatePercentaggeByUser() // To do Calling properly
+    public void CalculatePercentaggeByUser(float finalPosition) //Calculate the percentage by user
     {
-        float finalPostion = SlashUIManager.instance.slashMainView.imageHandler.slashSlider.finalPosition.x;//final position at which user stopped the slider
-        Debug.Log("finalPostion: " + finalPostion);
-        float positionRespectToWidth = (boxWidth/2) + finalPostion;// calculated position according to the width of the box or item
+        //float finalPostion = SlashUIManager.instance.slashMainView.imageHandler.slashSlider.finalPosition.x;//final position at which user stopped the slider
+        Debug.Log("finalPostion: " + finalPosition);
+        float positionRespectToWidth = (boxWidth/2) + finalPosition;// calculated position according to the width of the box or item
         Debug.Log("positionRespectToWidth: " + positionRespectToWidth);
         percentageByUser = (positionRespectToWidth / boxWidth) * 100;//calculated percentage
         Debug.Log("percentageByUser: " + percentageByUser);
@@ -104,18 +98,24 @@ public class SlashManager : SlashBaseGameManager
         SlashUIManager.instance.slashMainView.SplitImageRoutine(percentageByUser);
     }
 
-    public bool isValidPosition()
+    public bool isValidPosition(float finalPosition) // To Check that user percentage is correct or wrong
     {
-        if(percentageByUser == percentageToSlash || (percentageByUser >= percentageToSlash - errorMarginPercentage 
+        CalculatePercentaggeByUser(finalPosition);
+        if (percentageByUser == percentageToSlash || (percentageByUser >= percentageToSlash - errorMarginPercentage 
             && percentageByUser <= percentageToSlash + errorMarginPercentage))
             return true;
         return false;
     }
-    
-    public void PlaySplitAnimation() 
+
+    public void isAnswerSubmitted(float finalPosition) //Called after the used done with adjusting the slider
     {
-        SlashUIManager.instance.slashMainView.SplitImage(percentageByUser);
+        if (isValidPosition(finalPosition))
+            StartCoroutine(OnWin());
+        else
+            StartCoroutine(OnLose());
+
     }
+    
 #endregion  
 
 #region PRIVATE_METHODS
@@ -126,40 +126,53 @@ public class SlashManager : SlashBaseGameManager
     private void SetLevelParameters()
     {
         SlashUIManager.instance.slashMainView.StartDownloadImageRoutine(currentLevel);
+        totalRounds = 5;
     }
 
     private void SetRoundParameters()
     {
-        SlashUIManager.instance.slashMainView.SetImageToSlash(levelData.perLevelData[currentLevel].levelParameters[currentRound].itemImage);
-        percentageToSlash = levelData.perLevelData[currentLevel].levelParameters[currentRound].percentage;
+        SlashUIManager.instance.slashMainView.SetImageToSlash(levelData.perLevelData[0].levelParameters[currentRound].itemImage.sprite);
+        percentageToSlash = levelData.perLevelData[0].levelParameters[currentRound].percentage;
+        SlashUIManager.instance.slashMainView.SetPercentageText(percentageToSlash);
     }
     private void  ResetRound()
     {
         SlashUIManager.instance.slashMainView.imageHandler.ResetImages();
     }
-    // Get random percentage for people to stop the Slider on
-    //private float GetRandomPercentage()
-    //{
-    //    percentageToSlash = Random.Range(1, 100);
-    //    return percentageToSlash;
-    //}
+    
 #endregion
 
 #region DELEGTE_CALLBACK
 #endregion
 
 #region Coroutines
-    private IEnumerator OnWin() //TODO
+    private IEnumerator OnWin() // Called when round wins
     {
         totalScore++;
+        StartCoroutine(SlashUIManager.instance.slashMainView.UpdateScoreAnim());
+        yield return new WaitForSeconds(5f);
         Generate();
-        yield return null;
     }
-    private IEnumerator OnLose() //TODO
+    private IEnumerator OnLose() // Called when round Lose
     {
-        yield return null;
+        yield return new WaitForSeconds(5f);
         Generate();
     }
-#endregion
+    private IEnumerator StartGame()
+    {
+        SlashUIManager.instance.slashMainView.ShowView();
+        ResetActivity();
+        SetLevelParameters();
+        yield return new WaitForSeconds(3f);
+        Generate();
+    }
+
+    public IEnumerator StartLoadingData(int activityIndex) // Load LevelData for according to activity
+    {
+        Init(activityIndex);
+        yield return new WaitForSeconds(3f);
+        SlashUIManager.instance.panelActivityView.HideView();
+    }
+    #endregion
 }
 

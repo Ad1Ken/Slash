@@ -14,6 +14,11 @@ public class SlashLosePanel : BaseView
     #endregion
 
     #region PUBLIC_METHODS
+    public void OnClicRetry()
+    {
+        StartCoroutine(SlashManager.Instance.StartLoadingData(SlashManager.Instance.currentLevel));
+        HideView();
+    }
     #endregion
 
     #region PRIVATE_METHODS
