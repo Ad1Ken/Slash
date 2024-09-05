@@ -12,4 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/BoxyView.unity
     guid: ae7785a1d1adbe446898b12d212ba894
   m_configObjects:
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 6bbac58b436363943b6e9768fb7d87ed, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 0dffc496bf307654b86b851ba25577e2, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 56fc9e9107ea64645bfc7162bd2d2899, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 1d7ac27ed9ee07e4d8d45a3381a38ba0, type: 2}
