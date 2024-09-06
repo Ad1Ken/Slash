@@ -22,6 +22,7 @@ public class SlashActivityItem : MonoBehaviour
     #region PUBLIC_METHODS
     public void OnClickPlay()
     {
+        SoundManager.instance.PlayClickSound();
         StartCoroutine(SlashManager.Instance.StartLoadingData(activityIndex));
         StartCoroutine(SlashUIManager.instance.panelActivityView.IncreaseSlider(0f,3f));
     }

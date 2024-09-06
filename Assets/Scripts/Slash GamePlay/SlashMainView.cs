@@ -62,12 +62,14 @@ public class SlashMainView : BaseView
 
     public void OnClickHome() //Home button
     {
+        SoundManager.instance.PlayClickSound();
         StopAllCoroutines();
         SlashUIManager.instance.HideAllPanel();
         SlashUIManager.instance.panelActivityView.ShowView();
     }
     public void OnClickExit() //Exit button
     {
+        SoundManager.instance.PlayClickSound();
         Application.Quit(); 
     }
 
@@ -163,6 +165,7 @@ public class SlashMainView : BaseView
     public IEnumerator UpdateScoreAnim()//Coroutine to Update Score, placing the star and updating the slider
     {
         yield return new WaitForSeconds(1f);
+        SoundManager.instance.PlaySliderFillUpSound();
         SliderStarAnimation();
         yield return new WaitForSeconds(2f);
         scoreSlider.updateScore();

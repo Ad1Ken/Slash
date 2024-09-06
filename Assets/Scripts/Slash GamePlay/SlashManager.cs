@@ -148,6 +148,7 @@ public class SlashManager : SlashBaseGameManager
 #region Coroutines
     private IEnumerator OnWin() // Called when round wins
     {
+        SoundManager.instance.PlayCorrectSound();
         totalScore++;
         StartCoroutine(SlashUIManager.instance.slashMainView.UpdateScoreAnim());
         yield return new WaitForSeconds(5f);
@@ -155,6 +156,7 @@ public class SlashManager : SlashBaseGameManager
     }
     private IEnumerator OnLose() // Called when round Lose
     {
+        SoundManager.instance.PlayWrongSound();
         yield return new WaitForSeconds(5f);
         Generate();
     }

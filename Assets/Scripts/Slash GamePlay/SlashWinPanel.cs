@@ -16,6 +16,7 @@ public class SlashWinPanel : BaseView
     #region PUBLIC_METHODS
     public void OnClickNext()
     {
+        SoundManager.instance.PlayClickSound();
         StartCoroutine(SlashManager.Instance.StartLoadingData(SlashManager.Instance.currentLevel));
         HideView();
     }

@@ -16,6 +16,7 @@ public class SlashLosePanel : BaseView
     #region PUBLIC_METHODS
     public void OnClicRetry()
     {
+        SoundManager.instance.PlayClickSound();
         StartCoroutine(SlashManager.Instance.StartLoadingData(SlashManager.Instance.currentLevel));
         HideView();
     }

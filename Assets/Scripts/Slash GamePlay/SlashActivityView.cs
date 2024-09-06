@@ -25,6 +25,7 @@ public class SlashActivityView : BaseView
     #region PUBLIC_METHODS
     public void OnClickExit()
     {
+        SoundManager.instance.PlayClickSound();
         Application.Quit();
     }
     #endregion
@@ -42,6 +43,7 @@ public class SlashActivityView : BaseView
         for (int i = 0; i < activityCount; i++)
         {
             SlashActivityItem item = Instantiate(activityItemPrefab, content.transform);
+            SoundManager.instance.PlayPopSound();
             //item.transform.localScale = Vector2.zero;
             //item.GetComponent<RectTransform>().DOScale(1f, 0.2f);
             //Image temp = item.GetComponent<Image>();
